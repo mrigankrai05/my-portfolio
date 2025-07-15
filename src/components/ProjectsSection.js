@@ -58,7 +58,7 @@ const ProjectsSection = () => {
       title: 'Portfolio Website',
       description: 'A personal portfolio website built from scratch using pure React.js, showcasing skills, projects, and experience with modern UI/UX, responsive design, and interactive elements.',
       techStack: ['React.js', 'Tailwind CSS', 'JavaScript', 'HTML'],
-      link: '#', // This is the current website, link if deployed
+      link: 'https://mrigankrai05.github.io/my-portfolio/', // This is the current website, link if deployed
     },
     {
       title: 'Thoughts App',
