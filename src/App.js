@@ -155,7 +155,7 @@ const AppContent = () => {
 
   // Determine overall background color based on theme
   const appBgColor = theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100';
-  const appTextColor = theme === 'dark' ? 'text-gray-100' : 'text-gray-900';
+  const appTextColor = theme === 'dark' ? 'text-gray-100' : 'text-gray-1000';
   const navBg = theme === 'dark' ? 'bg-gray-800' : 'bg-white';
   const navOpacity = theme === 'dark' ? 'bg-opacity-90' : 'bg-opacity-95';
   const footerBg = theme === 'dark' ? 'bg-gray-800' : 'bg-white';
