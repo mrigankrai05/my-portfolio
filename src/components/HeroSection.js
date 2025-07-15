@@ -7,7 +7,7 @@ const HeroSection = ({ scrollToSection }) => {
   const { theme } = useTheme(); // Consume theme context
 
   // Adjust text colors based on theme
-  const gradientFrom = theme === 'dark' ? 'from-purple-400' : 'text-purple-700';
+  const gradientFrom = theme === 'dark' ? 'from-purple-400' : 'text-purple-1000';
   const gradientTo = theme === 'dark' ? 'to-blue-400' : 'to-purple-600';
   const textColor = theme === 'dark' ? 'text-gray-300' : 'text-gray-1000';
 
