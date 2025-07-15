@@ -14,7 +14,7 @@ const HeroSection = ({ scrollToSection }) => {
   return (
     <section id="home" className="relative h-screen flex items-center justify-center text-center overflow-hidden">
       {/* Overlay for text readability (darker in dark mode, can be lighter in light mode if needed) */}
-      <div className="absolute inset-0"></div>
+      <div className="absolute inset-0 bg-black opacity-60 z-10 dark:bg-black dark:opacity-60"></div>
 
       {/* Ensure your text content has a higher z-index */}
       <div className="z-20 p-8 max-w-4xl mx-auto">
