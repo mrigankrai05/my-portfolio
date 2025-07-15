@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 // --- Profile Image Import ---
-// IMPORTANT: This path is relative to the App.js file.
-// If App.js is in 'src/', and your image is in 'src/assets/',
-// then './assets/mrigankphoto.jpg' is correct.
 import mrigankPhoto from './assets/mrigankphoto.jpg';
+
+// --- Import the Galaxy Background Component ---
+import GalaxyBackground from './components/GalaxyBackground';
 
 // --- Navigation Item Component ---
 const NavItem = ({ id, label, active, onClick, className = '' }) => (
@@ -12,7 +12,7 @@ const NavItem = ({ id, label, active, onClick, className = '' }) => (
     onClick={() => onClick(id)}
     className={`relative text-lg font-medium transition-all duration-300 ease-in-out
       ${active ? 'text-purple-400' : 'text-gray-300 hover:text-purple-300'}
-      ${className}`} // Allows additional classes for styling (e.g., text size in mobile menu)
+      ${className}`}
   >
     {label}
     {active && (
@@ -26,52 +26,45 @@ const AnimatedSection = ({ children, id, className = '' }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
-  // Callback for the IntersectionObserver
   const handleIntersection = useCallback((entries) => {
     const [entry] = entries;
     if (entry.isIntersecting) {
       setIsVisible(true);
-      // Optionally, stop observing once it's visible to only animate once
-      // observer.unobserve(entry.target); // This would require 'observer' in useCallback's params
     }
-  }, []); // Empty dependency array means handleIntersection is stable
+  }, []);
 
   useEffect(() => {
-    // Capture the current value of the ref at the start of the effect
     const currentElement = sectionRef.current;
-
     if (currentElement) {
       const observerOptions = {
-        root: null, // viewport
+        root: null,
         rootMargin: '0px',
-        threshold: 0.1, // Trigger when 10% of the element is visible
+        threshold: 0.1,
       };
-
       const observer = new IntersectionObserver(handleIntersection, observerOptions);
-
       observer.observe(currentElement);
-
-      // Cleanup function to unobserve when component unmounts or effect re-runs
       return () => {
         if (currentElement) {
           observer.unobserve(currentElement);
         }
       };
     }
-  }, [handleIntersection]); // Dependency: handleIntersection (stable due to useCallback)
+  }, [handleIntersection]);
 
   return (
     <section
       id={id}
       ref={sectionRef}
+      // Increased opacity for darker, more visible backgrounds
       className={`py-20 px-8 rounded-xl shadow-lg mx-auto max-w-6xl mt-12 transition-opacity duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}
+      style={{ backgroundColor: 'rgba(26, 32, 44, 0.9)' }} // Changed opacity from 0.7 to 0.9
     >
       {children}
     </section>
   );
 };
 
-// --- Typewriter Effect Component ---
+// --- Typewriter Effect Component (FIXED) ---
 const Typewriter = ({ text, delay, repeatDelay = 0 }) => {
   const [currentText, setCurrentText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -81,7 +74,7 @@ const Typewriter = ({ text, delay, repeatDelay = 0 }) => {
     if (!isTypingComplete && currentIndex < text.length) {
       const timeout = setTimeout(() => {
         setCurrentText(prevText => prevText + text[currentIndex]);
-        setCurrentIndex(prevIndex => prevIndex + 1);
+        setCurrentIndex(prevIndex => prevIndex + 1); // FIX: Corrected variable name here
       }, delay);
       return () => clearTimeout(timeout);
     } else if (currentIndex === text.length && repeatDelay > 0) {
@@ -94,31 +87,23 @@ const Typewriter = ({ text, delay, repeatDelay = 0 }) => {
     } else if (currentIndex === text.length && !isTypingComplete) {
       setIsTypingComplete(true);
     }
-  }, [currentIndex, delay, text, repeatDelay, isTypingComplete]);
+  }, [currentIndex, delay, text, repeatDelay, isTypingComplete]); // Added isTypingComplete to dependencies
 
   return <span>{currentText}</span>;
 };
 
 // --- Hero Section Component ---
 const HeroSection = ({ scrollToSection }) => (
-  <section id="home" className="relative h-screen flex items-center justify-center text-center bg-cover bg-center bg-no-repeat overflow-hidden"
-    style={{
-      // Using the imported image for the background
-      backgroundImage: `url('https://raw.githubusercontent.com/mrigankrai05/portfolio-website/main/public/mrigank_rai_photo.jpg')`,
-      backgroundColor: '#1a202c' // gray-900 fallback
-    }}>
-    <div className="absolute inset-0 bg-black opacity-60 z-0"></div> {/* Overlay for text readability */}
-    <div className="absolute inset-0 z-0 opacity-10">
-      {/* Background animation elements */}
-      <div className="absolute w-40 h-40 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob top-10 left-10"></div>
-      <div className="absolute w-40 h-40 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 bottom-20 right-20"></div>
-      <div className="absolute w-40 h-40 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
-    </div>
-    <div className="z-10 p-8 max-w-4xl mx-auto">
+  <section id="home" className="relative h-screen flex items-center justify-center text-center overflow-hidden">
+    {/* Overlay for text readability */}
+    <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
+
+    {/* Ensure your text content has a higher z-index */}
+    <div className="z-20 p-8 max-w-4xl mx-auto">
       <h1 className="text-4xl md:text-7xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 animate-fade-in-down">
         <Typewriter text="Hello, I'm Mrigank Rai" delay={100} repeatDelay={3000} />
       </h1>
-      <p className="mt-6 text-xl md:text-2xl text-gray-300 animate-fade-in-up">
+      <p className="mt-6 text-xl md:text-2xl text-gray-100 animate-fade-in-up">
         As a Computer Science and Engineering undergraduate, I build robust solutions across data science, full-stack, and mobile app development, driven by a passion for creating impactful digital experiences.
       </p>
       <div className="mt-10 flex justify-center space-x-6 animate-fade-in-up animation-delay-500">
@@ -135,7 +120,7 @@ const HeroSection = ({ scrollToSection }) => (
 
 // --- About Section Component ---
 const AboutSection = () => (
-  <AnimatedSection id="about" className="bg-gray-800">
+  <AnimatedSection id="about" className="relative z-10">
     <h2 className="text-4xl font-bold text-center text-purple-400 mb-12">About Me</h2>
     <div className="flex flex-col md:flex-row items-center gap-12">
       <div className="md:w-1/3 flex justify-center">
@@ -162,11 +147,11 @@ const SkillsSection = () => {
     languages: ['Python', 'C++', 'JavaScript', 'Dart'],
     frameworks: ['Flutter', 'React.js', 'Node.js', 'Express', 'Scikit-Learn', 'Pandas', 'Matplotlib'],
     databases: ['MongoDB', 'MySQL', 'Firebase Firestore', 'SQLite'],
-    tools: ['Firebase (Authentication, Cloud Storage, Realtime DB)', 'AWS', 'Git', 'GitHub'],
+    tools: ['Firebase', 'AWS', 'Git', 'GitHub'],
   };
 
   return (
-    <AnimatedSection id="skills" className="bg-gray-900">
+    <AnimatedSection id="skills" className="relative z-10">
       <h2 className="text-4xl font-bold text-center text-purple-400 mb-12">Skills</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <SkillCategory title="Languages" items={skills.languages} />
@@ -199,7 +184,7 @@ const ExperienceSection = () => {
     {
       title: 'Flutter Developer Intern',
       company: 'Algosoft.co',
-      duration: 'June 2025 - August 2025',
+      duration: 'June 2025 - Present',
       description: [
         'Developed and maintained cross-platform mobile applications using Flutter.',
         'Designed and implemented responsive UIs for both chef and user-facing apps.',
@@ -221,7 +206,7 @@ const ExperienceSection = () => {
   ];
 
   return (
-    <AnimatedSection id="experience" className="bg-gray-800">
+    <AnimatedSection id="experience" className="relative z-10">
       <h2 className="text-4xl font-bold text-center text-purple-400 mb-12">Work Experience</h2>
       <div className="space-y-10">
         {experiences.map((exp, index) => (
@@ -236,7 +221,7 @@ const ExperienceSection = () => {
 const ExperienceCard = ({ experience }) => (
   <div className="bg-gray-900 p-8 rounded-lg shadow-md border border-gray-700 hover:border-purple-500 transition-all duration-300 transform hover:scale-[1.02]">
     <h3 className="text-2xl font-semibold text-blue-300">{experience.title}</h3>
-    <p className="text-lg text-gray-400 mt-1">{experience.company} | {experience.duration}</p>
+    <p className="text-lg text-gray-200 mt-1">{experience.company} | {experience.duration}</p>
     <ul className="list-disc list-inside text-gray-300 mt-4 space-y-2">
       {experience.description.map((point, index) => (
         <li key={index}>{point}</li>
@@ -281,7 +266,7 @@ const ProjectsSection = () => {
   ];
 
   return (
-    <AnimatedSection id="projects" className="bg-gray-900">
+    <AnimatedSection id="projects" className="relative z-10">
       <h2 className="text-4xl font-bold text-center text-purple-400 mb-12">Projects</h2>
       <div className="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-gray-700">
         <div className="flex space-x-8 min-w-max">
@@ -297,7 +282,7 @@ const ProjectsSection = () => {
 // Project Card Component
 const ProjectCard = ({ project }) => {
   return (
-    <div className="flex-shrink-0 w-80 bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]">
+    <div className="flex-shrink-0 w-80 bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 hover:border-blue-500 transition-all duration-300">
       <h3 className="text-2xl font-semibold text-blue-300 mb-3">{project.title}</h3>
       <p className="text-gray-300 text-sm mb-4">{project.description}</p>
       <div className="flex flex-wrap gap-2 mb-4">
@@ -338,7 +323,7 @@ const EducationSection = () => {
   ];
 
   return (
-    <AnimatedSection id="education" className="bg-gray-800">
+    <AnimatedSection id="education" className="relative z-10">
       <h2 className="text-4xl font-bold text-center text-purple-400 mb-12">Education</h2>
       <div className="space-y-8">
         {education.map((edu, index) => (
@@ -360,7 +345,7 @@ const EducationCard = ({ education }) => (
 
 // --- Contact Section Component ---
 const ContactSection = () => (
-  <AnimatedSection id="contact" className="bg-gray-900">
+  <AnimatedSection id="contact" className="relative z-10">
     <h2 className="text-4xl font-bold text-center text-purple-400 mb-12">Get In Touch</h2>
     <div className="flex flex-col md:flex-row justify-center items-center gap-10">
       <ContactInfo icon="fas fa-phone-alt" label="Phone" value="+918882747035" link="tel:+918882747035" />
@@ -386,7 +371,7 @@ const ContactInfo = ({ icon, label, value, link }) => (
 // --- Main App Component ---
 const App = () => {
   const [activeSection, setActiveSection] = useState('home');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Function to smoothly scroll to a section.
   const scrollToSection = (id) => {
@@ -394,7 +379,7 @@ const App = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setActiveSection(id);
-      setIsMobileMenuOpen(false); // Close mobile menu after clicking a link
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -404,10 +389,9 @@ const App = () => {
       const sections = document.querySelectorAll('section[id]');
       let currentActive = 'home';
       for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i]; // Use the actual section element
+        const section = sections[i];
         if (section) {
           const rect = section.getBoundingClientRect();
-          // Consider a section active if its middle is in the viewport
           if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
             currentActive = section.id;
             break;
@@ -424,13 +408,13 @@ const App = () => {
   // Effect to close mobile menu when screen resizes to desktop breakpoint
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768 && isMobileMenuOpen) { // 768px is Tailwind's 'md' breakpoint
+      if (window.innerWidth >= 768 && isMobileMenuOpen) {
         setIsMobileMenuOpen(false);
       }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isMobileMenuOpen]); // Dependency: Re-run if isMobileMenuOpen changes
+  }, [isMobileMenuOpen]);
 
   // Inject custom styles and Font Awesome into the document head once
   useEffect(() => {
@@ -474,20 +458,6 @@ const App = () => {
         to { opacity: 1; transform: translateY(0); }
       }
 
-      @keyframes blob {
-        0% { transform: translate(0px, 0px) scale(1); }
-        33% { transform: translate(30px, -50px) scale(1.1); }
-        66% { transform: translate(-20px, 20px) scale(0.9); }
-        100% { transform: translate(0px, 0px) scale(1); }
-      }
-
-      .animate-fade-in-down { animation: fadeInDown 1s ease-out forwards; }
-      .animate-fade-in-up { animation: fadeInUp 1s ease-out forwards; }
-      .animate-blob { animation: blob 7s infinite; }
-      .animation-delay-500 { animation-delay: 0.5s; }
-      .animation-delay-2000 { animation-delay: 2s; }
-      .animation-delay-4000 { animation-delay: 4s; }
-
       @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: .5; }
@@ -496,38 +466,38 @@ const App = () => {
 
       /* Button styles */
       .btn-primary {
-        display: flex; /* Use flex for icon alignment */
+        display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.75rem 1.5rem; /* px-6 py-3 */
-        border-radius: 9999px; /* rounded-full */
-        background-image: linear-gradient(to right, #8b5cf6, #3b82f6); /* from-purple-600 to-blue-600 */
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        background-image: linear-gradient(to right, #8b5cf6, #3b82f6);
         color: white;
-        font-weight: 600; /* font-semibold */
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-        transition: all 0.3s ease-in-out; /* transition-all duration-300 */
+        font-weight: 600;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease-in-out;
       }
       .btn-primary:hover {
-        background-image: linear-gradient(to right, #7c3aed, #2563eb); /* hover:from-purple-700 hover:to-blue-700 */
-        transform: scale(1.05); /* hover:scale-105 */
+        background-image: linear-gradient(to right, #7c3aed, #2563eb);
+        transform: scale(1.05);
       }
 
       .btn-secondary {
-        display: flex; /* Use flex for icon alignment */
+        display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.75rem 1.5rem; /* px-6 py-3 */
-        border-radius: 9999px; /* rounded-full */
-        background-color: #4a5568; /* gray-700 */
-        color: #d1d5db; /* gray-200 */
-        font-weight: 600; /* font-semibold */
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-        transition: all 0.3s ease-in-out; /* transition-all duration-300 */
-        border: 1px solid #4a5568; /* border border-gray-600 */
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        background-color: #4a5568;
+        color: #d1d5db;
+        font-weight: 600;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease-in-out;
+        border: 1px solid #4a5568;
       }
       .btn-secondary:hover {
-        background-color: #4a5568; /* hover:bg-gray-600 */
-        transform: scale(1.05); /* hover:scale-105 */
+        background-color: #4a5568;
+        transform: scale(1.05);
       }
     `;
     document.head.appendChild(styleElement);
@@ -537,15 +507,19 @@ const App = () => {
     fontAwesomeLink.rel = "stylesheet";
     document.head.appendChild(fontAwesomeLink);
 
-    // Clean up injected styles if the component unmounts (though for App, it's usually once)
     return () => {
       document.head.removeChild(styleElement);
       document.head.removeChild(fontAwesomeLink);
     };
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 font-inter">
+    <div className="min-h-screen bg-gray-900 text-gray-100 font-inter relative">
+      {/* GLOBAL GALAXY BACKGROUND */}
+      <div className="fixed inset-0 w-full h-full z-0">
+        <GalaxyBackground />
+      </div>
+
       {/* Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-800 bg-opacity-90 shadow-lg py-4 px-6 md:px-12 flex justify-between items-center rounded-b-xl">
         <div className="text-2xl font-bold text-purple-400">MRIGANK RAI</div>
@@ -563,10 +537,8 @@ const App = () => {
           <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-100 focus:outline-none">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               {isMobileMenuOpen ? (
-                // 'X' icon when menu is open
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               ) : (
-                // Hamburger icon when menu is closed
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
               )}
             </svg>
@@ -579,10 +551,10 @@ const App = () => {
         <div className="md:hidden fixed inset-0 z-40 bg-gray-900 bg-opacity-95 flex flex-col items-center justify-center space-y-8 animate-fade-in">
           {/* Close button */}
           <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-6 right-6 text-gray-100 text-4xl focus:outline-none">
-            &times; {/* Close 'X' icon */}
+            &times;
           </button>
 
-          {/* Mobile Nav Items - Reusing NavItem component */}
+          {/* Mobile Nav Items */}
           <NavItem id="home" label="Home" active={activeSection === 'home'} onClick={scrollToSection} className="text-3xl" />
           <NavItem id="about" label="About" active={activeSection === 'about'} onClick={scrollToSection} className="text-3xl" />
           <NavItem id="skills" label="Skills" active={activeSection === 'skills'} onClick={scrollToSection} className="text-3xl" />
@@ -594,8 +566,8 @@ const App = () => {
       )}
 
       {/* Main Content Sections */}
-      <main className="pt-20"> {/* Added padding top to account for fixed navbar */}
-        <HeroSection scrollToSection={scrollToSection} /> {/* Pass scrollToSection if needed */}
+      <main className="pt-20 relative z-10">
+        <HeroSection scrollToSection={scrollToSection} />
         <AboutSection />
         <SkillsSection />
         <ExperienceSection />
@@ -605,7 +577,7 @@ const App = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-center py-6 mt-12 rounded-t-xl">
+      <footer className="bg-gray-800 text-center py-6 mt-12 rounded-t-xl relative z-10">
         <p>&copy; {new Date().getFullYear()} Mrigank Rai. All rights reserved.</p>
       </footer>
     </div>
