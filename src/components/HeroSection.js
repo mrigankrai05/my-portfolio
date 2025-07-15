@@ -22,7 +22,7 @@ const HeroSection = ({ scrollToSection }) => {
 
       {/* Ensure your text content has a higher z-index */}
       <div className="z-20 p-8 max-w-4xl mx-auto">
-        <h1 className={`text-4xl md:text-7xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r ${gradientFrom} ${gradientTo} animate-fade-in-down`}>
+        <h1 className={`text-4xl md:text-7xl font-extrabold leading-tight bg-clip-text bg-gradient-to-r ${gradientFrom} ${gradientTo} animate-fade-in-down`}>
           <Typewriter text="Hello, I'm Mrigank Rai" delay={100} repeatDelay={3000} />
         </h1>
         <p className={`mt-6 text-xl md:text-2xl ${textColor} animate-fade-in-up`}>
