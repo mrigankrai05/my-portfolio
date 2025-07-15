@@ -1,20 +1,24 @@
 // src/components/HeroSection.js
 import React from 'react';
 import Typewriter from './Typewriter';
-import { useTheme } from '../ThemeContext'; // Import useTheme from parent directory
+import { useTheme } from '../ThemeContext';
 
 const HeroSection = ({ scrollToSection }) => {
-  const { theme } = useTheme(); // Consume theme context
+  const { theme } = useTheme();
 
   // Adjust text colors based on theme
   const gradientFrom = theme === 'dark' ? 'from-purple-400' : 'from-blue-600';
   const gradientTo = theme === 'dark' ? 'to-blue-400' : 'to-purple-600';
   const textColor = theme === 'dark' ? 'text-gray-300' : 'text-gray-700';
 
+  // Determine overlay classes based on theme
+  const overlayBg = theme === 'dark' ? 'bg-black' : 'bg-white'; // Or a very light gray, e.g., bg-gray-50
+  const overlayOpacity = theme === 'dark' ? 'opacity-60' : 'opacity-20'; // Adjust opacity for light mode as needed
+
   return (
     <section id="home" className="relative h-screen flex items-center justify-center text-center overflow-hidden">
-      {/* Overlay for text readability (darker in dark mode, can be lighter in light mode if needed) */}
-      <div className="absolute inset-0 bg-black opacity-60 z-10 dark:bg-black dark:opacity-60"></div>
+      {/* Overlay for text readability */}
+      <div className={`absolute inset-0 ${overlayBg} ${overlayOpacity} z-10`}></div>
 
       {/* Ensure your text content has a higher z-index */}
       <div className="z-20 p-8 max-w-4xl mx-auto">
