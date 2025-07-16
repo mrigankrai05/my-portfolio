@@ -50,7 +50,7 @@ const ExperienceSection = () => {
     {
       title: 'Flutter Developer Intern',
       company: 'Algosoft.co',
-      duration: 'June 2025 - August 2025',
+      duration: 'June 2025 - Present',
       description: [
         'Developed and maintained cross-platform mobile applications using Flutter.',
         'Designed and implemented responsive UIs for both chef and user-facing apps.',

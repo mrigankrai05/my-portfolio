@@ -3,8 +3,6 @@ import React from 'react';
 import { useTheme } from '../ThemeContext'; // Import useTheme from parent directory
 
 const NavItem = ({ id, label, active, onClick, className = '' }) => {
-  const { theme } = useTheme(); // Consume theme context
-
   return (
     <button
       onClick={() => onClick(id)}
