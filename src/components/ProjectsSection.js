@@ -49,6 +49,12 @@ const ProjectsSection = () => {
       link: 'https://drive.google.com/file/d/15x7fX3YJcg6aFCGqOyGwsV_O9ty-MEBj/view', // Replace with actual link if available
     },
     {
+      title: 'SmartRoamer',
+      description: 'Developed SmartRoamer, a responsive AI-powered trip planning web application that generates personalized travel itineraries and displays real-time weather. I leveraged the Google Gemini API to process user inputs (destination and duration) and return structured JSON data for both the itinerary and weather.A key feature is the ability to export the final, formatted travel plan as a multi-page PDF using the jsPDF library, creating a seamless and portable user experience.',
+      techStack: ['HTML', 'CSS', 'Javascript', 'Google Gemini API', 'jsPDF'],
+      link: 'https://smartroamer.vercel.app', // Replace with actual link if available
+    },
+    {
       title: 'Healthcare Plus',
       description: 'Developed Health Care Plus, a web platform aimed at bridging technical limitations and communication gaps in healthcare. Seamless doctor-patient interaction, real-time appointment booking, and medical resource tracking. The project was recognized at the Innovate Hackathon.',
       techStack: ['React', 'Node.js', 'MongoDB'],
