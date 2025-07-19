@@ -56,7 +56,7 @@ const ProjectsSection = () => {
     },
     {
       title: 'Healthcare Plus',
-      description: 'Developed Health Care Plus, a web platform aimed at bridging technical limitations and communication gaps in healthcare. Seamless doctor-patient interaction, real-time appointment booking, and medical resource tracking. The project was recognized at the Innovate Hackathon.',
+      description: 'Developed Health Care Plus, a platform aimed at bridging technical limitations and communication gaps in healthcare. Seamless doctor-patient interaction, real-time appointment booking, and medical resource tracking. The project was recognized at the Innovate Hackathon.',
       techStack: ['React', 'Node.js', 'MongoDB'],
       link: false, // Example link, replace with actual
     },
